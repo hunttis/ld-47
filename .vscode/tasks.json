@@ -4,9 +4,9 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "refresh-a",
+      "label": "refresh-hunttis",
       "type": "shell",
-      "command": "node ./scripts/refresh.js SceneA.html",
+      "command": "node ./scripts/refresh.js SceneHunttis.html",
       "problemMatcher": [],
       "presentation": {
         "echo": false,
@@ -18,9 +18,9 @@
       }
     },
     {
-      "label": "refresh-b",
+      "label": "refresh-murtsi",
       "type": "shell",
-      "command": "node ./scripts/refresh.js SceneB.html",
+      "command": "node ./scripts/refresh.js SceneMurtsi.html",
       "problemMatcher": [],
       "presentation": {
         "echo": false,

@@ -13,13 +13,13 @@ export function startGame() {
     },
     parent: "game",
     backgroundColor: "#0f0f0f",
-    scene: new SceneB(),
+    scene: new SceneMurtsi(),
   };
 
   return new Phaser.Game(config);
 }
 
-export class SceneB extends Phaser.Scene {
+export class SceneMurtsi extends Phaser.Scene {
   constructor() {
     super({ active: false, visible: false });
   }

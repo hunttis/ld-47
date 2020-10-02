@@ -8,5 +8,5 @@
       "src/*": ["src/*"]
     }
   },
-  "include": ["src"]
+  "include": ["./src/types/phaser.d.ts", "src"]
 }
