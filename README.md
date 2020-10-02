@@ -1,3 +1,9 @@
+# Ludum Dare 47 game
+
+The game implementation goes into this project!
+
+This uses the phaser template, described below!
+
 # Phaser collaborative template
 
 Phaser template for use with VSCode remote development by multiple people simultaneously.
