@@ -19,6 +19,7 @@ export class MenuScene extends Phaser.Scene {
 
     this.createGameTitle();
     this.createStartButton();
+    this.createTutorialText();
 
     this.events.on(this.StartGameEvent, this.startGameScene, this);
 
@@ -31,9 +32,23 @@ export class MenuScene extends Phaser.Scene {
   createGameTitle() {
     const cameraWidth = this.cameras.default.width;
 
-    const text1 = this.add.text(0, 100, "Game name", { font: "128px Arial" });
+    const text1 = this.add.text(0, 100, "Ludum Dare 47 Game", { font: "128px Arial" });
     text1.setTint(0xff00ff, 0xffff00, 0x0000ff, 0xff0000);
     text1.x = cameraWidth / 2 - text1.width / 2;
+  }
+
+  createTutorialText() {
+    const cameraWidth = this.cameras.default.width;
+
+    const text1 = this.add.text(0, this.game.scale.height - 200, "- How to play -", { font: "48px Arial" });
+    text1.setTint(0xaabbff, 0xaaffaa, 0xaaaaff, 0xffaaaa);
+    text1.x = cameraWidth / 2 - text1.width / 2;
+
+    const text2 = this.add.text(0, this.game.scale.height - 100, "", { font: "32px Arial" });
+    text2.setTint(0xaabbff, 0xaaffaa, 0xaaaaff, 0xffaaaa);
+    text2.setText("SPACEBAR: hop from ring to ring when near an intersection.\nTry to 'paint' as much of the rings as possible for maximum score!");
+    text2.x = cameraWidth / 2 - text2.width / 2;
+
   }
 
   createStartButton() {

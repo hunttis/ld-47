@@ -1,47 +1,103 @@
+import { Levels } from "../gameobjects/Levels";
+import { MouseCursor } from "../gameobjects/MouseCursor";
+import { Player } from "../gameobjects/player";
+import { Ring } from "../gameobjects/Ring";
+import { ScoreBoard } from "../gameobjects/ScoreBoard";
+import { RingGroup } from "../groups/RingGroup";
+import { RingTextures } from "../util/RingTextures";
+
 export class GameScene extends Phaser.Scene {
-  cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
-  player!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
-  obstacle!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
+  mouseCursor!: Phaser.GameObjects.GameObject;
+  ringTextures!: RingTextures;
+  ringGroup!: RingGroup;
+  player!: Player;
+  playerTrail!: Phaser.GameObjects.RenderTexture;
+  smoke!: Phaser.GameObjects.Image;
+
+  updateGroup!: Phaser.GameObjects.Group;
+  scoreBoard!: ScoreBoard;
+
+  levels: Levels = new Levels();
 
   constructor() {
     super({ active: false, visible: false });
-    Phaser.Scene.call(this, { key: "GameScene" });
     console.log("game", this.game);
   }
 
   preload() {
-    console.log("Game preload");
-    this.load.image("box", "assets/images/box.png");
-    this.load.image("box2", "assets/images/box2.png");
+    this.ringTextures = new RingTextures(this);
+
+    this.load.image("smoke", "assets/images/smoke.png");
+    this.load.spritesheet("cursor", "assets/images/cursor.png", {
+      frameWidth: 16,
+      frameHeight: 16,
+      endFrame: 1
+    });
+
+    this.load.spritesheet("player", "assets/images/player-placeholder.png", {
+      frameWidth: 32,
+      frameHeight: 32,
+      endFrame: 1
+    });
+
   }
 
   create() {
-    console.log("Game create");
-    this.cursors = this.input.keyboard.createCursorKeys();
-    this.player = this.physics.add
-      .sprite(100, 100, "box")
-      .setCollideWorldBounds(true);
-    this.obstacle = this.physics.add
-      .sprite(200, 200, "box2")
-      .setCollideWorldBounds(true);
+
+    this.playerTrail = this.add.renderTexture(0, 0, this.scale.gameSize.width, this.scale.gameSize.height);
+    this.playerTrail.setBlendMode(Phaser.BlendModes.ADD);
+
+    this.smoke = this.add.image(-10, -10, "smoke");
+
+    this.createAnimations();
+    this.createLevel();
+    
+    this.scoreBoard = new ScoreBoard(this, this.ringGroup);
   }
 
   update() {
-    this.player.setVelocity(0, 0);
-    this.obstacle.setVelocity(0, 0);
+    this.ringGroup.update();
+    this.cameras.main.setBackgroundColor("#aaaaaa");
+    this.playerTrail.draw(this.smoke, this.player.x, this.player.y);
+    this.scoreBoard.update();
+  }
 
-    if (this.cursors.left!.isDown) {
-      this.player.setVelocityX(-100);
-    } else if (this.cursors.right!.isDown) {
-      this.player.setVelocityX(100);
-    }
+  createAnimations() {
+    this.anims.create({
+      key: "spin",
+      frames: this.anims.generateFrameNumbers("player", { start: 0, end: 0 }),
+    });
 
-    if (this.cursors.up!.isDown) {
-      this.player.setVelocityY(-100);
-    } else if (this.cursors.down!.isDown) {
-      this.player.setVelocityY(100);
-    }
+    this.anims.create({
+      key: "exit",
+      frames: this.anims.generateFrameNumbers("player", { start: 1, end: 1 }),
+    });
 
-    this.physics.world.collide(this.player, this.obstacle);
+    this.anims.create({
+      key: "cursor-ok",
+      frames: this.anims.generateFrameNumbers("cursor", { start: 0, end: 0 }),
+    });
+
+    this.anims.create({
+      key: "cursor-fail",
+      frames: this.anims.generateFrameNumbers("cursor", { start: 1, end: 1 }),
+    });
+  }
+
+  createLevel() {
+    const rings = this.levels.getLevel(1).rings.map(ringData => {
+      return new Ring(this, ringData, this.ringTextures);
+    })
+
+    this.ringGroup = new RingGroup(this, rings);
+    this.add.existing(this.ringGroup);
+
+    this.player = new Player(this, rings[0], this.ringGroup);
+    this.add.existing(this.player);
+
+    this.updateGroup = this.add.group(
+      [this.add.existing(new MouseCursor(this, this.ringGroup)), this.player],
+      { runChildUpdate: true }
+    );
   }
 }

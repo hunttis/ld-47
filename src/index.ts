@@ -1,12 +1,15 @@
-import { GameScene } from "./scenes/gameScene";
+// import { GameScene } from "./scenes/gameScene";
 import { MenuScene } from "./scenes/menuScene";
+
 
 export function startGame() {
   const config: Phaser.Types.Core.GameConfig = {
     title: "Phaser game",
     scale: {
-      width: 800,
-      height: 600,
+      mode: Phaser.Scale.FIT,
+      autoCenter: Phaser.Scale.CENTER_BOTH,
+      width: 1280,
+      height: 800,
     },
     physics: {
       default: "arcade",
@@ -16,7 +19,7 @@ export function startGame() {
     },
     parent: "game",
     backgroundColor: "#0f0f0f",
-    scene: [MenuScene],
+    scene: new MenuScene(),
   };
 
   return new Phaser.Game(config);
