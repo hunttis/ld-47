@@ -52,7 +52,7 @@ export class GameScene extends Phaser.Scene {
     this.createAnimations();
     this.createLevel();
     
-    this.scoreBoard = new ScoreBoard(this, this.ringGroup);
+    this.scoreBoard = new ScoreBoard(this, this.player);
   }
 
   update() {
@@ -93,7 +93,7 @@ export class GameScene extends Phaser.Scene {
     this.add.existing(this.ringGroup);
 
     this.player = new Player(this, rings[0], this.ringGroup);
-    this.add.existing(this.player);
+    this.physics.add.existing(this.player)
 
     this.updateGroup = this.add.group(
       [this.add.existing(new MouseCursor(this, this.ringGroup)), this.player],

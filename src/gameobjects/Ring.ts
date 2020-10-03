@@ -2,7 +2,15 @@ import { RingTextures } from "src/util/ringTextures";
 import { RingData } from "./Levels";
 import {Interval, overlappingIntervals} from './overlappingIntervals'
 
-export class Ring extends Phaser.GameObjects.Sprite {
+const generate = <T>(count: number, fn: (i: number) => T) => {
+    const array = new Array(count)
+    for (let i = 0; i < count; i++) {
+        array[i] = fn(i)
+    }
+    return array
+}
+
+export class Ring extends Phaser.Physics.Arcade.Sprite {
     readonly circle: Phaser.Geom.Circle
     readonly speed: number;
 
@@ -13,8 +21,11 @@ export class Ring extends Phaser.GameObjects.Sprite {
     playerAngle: number = 0;
     fullyTraveled = false;
 
+    scorePickups: Phaser.GameObjects.Group
+
     constructor(scene: Phaser.Scene, ringData: RingData, ringTextures: RingTextures) {
         super(scene, ringData.x, ringData.y, ringTextures.getTexture(ringData.radius));
+
         this.startingAngle = ringData.startingAngle;
         if (ringData.startingAngle) {
             this.entryAngle[0] = ringData.startingAngle
@@ -22,6 +33,14 @@ export class Ring extends Phaser.GameObjects.Sprite {
         }
         this.circle = new Phaser.Geom.Circle(ringData.x, ringData.y, ringData.radius);
         this.speed = ringData.speed;
+        if (this.speed < 0) {
+            this.flipX = true;
+        }
+
+        this.scorePickups = this.scene.add.group(
+            generate(ringData.scorePickups, () => this.scene.add.sprite(0, 0, 'score-pickup'))
+        )
+        Phaser.Actions.PlaceOnCircle(this.scorePickups.getChildren(), this.circle)
     }
 
     create() {
@@ -29,6 +48,7 @@ export class Ring extends Phaser.GameObjects.Sprite {
     }
 
     update() {
+        this.rotation += this.speed / 20;
     }
 
     updatePlayerAngle(playerAngle: number) {
@@ -44,16 +64,13 @@ export class Ring extends Phaser.GameObjects.Sprite {
         this.visitedParts.push(this.entryAngle)
     }
 
-    exitRing(angle: number) {
-    }
-
     getScore() {
         if (this.fullyTraveled) {
             return Math.PI * 2;
         }
         const intervals = overlappingIntervals(this.visitedParts)
         const score = intervals
-            .reduce((s, [start, end]) => s + (end - start), 0)
+            .reduce((s, interval) => s + intervalDistance(interval), 0)
         return score
     }
 
@@ -62,3 +79,7 @@ export class Ring extends Phaser.GameObjects.Sprite {
         return angleDistance / (2 * Math.PI)
     }
 }
+
+const intervalDistance = ([start, end]: Interval) => start > end ?
+    start - end :
+    end - start

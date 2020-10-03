@@ -22,7 +22,7 @@ export function startGame() {
       },
     },
     parent: "game",
-    backgroundColor: "#0f0f0f",
+    backgroundColor: "#C724B1",
     scene: new SceneA(),
   };
 
@@ -63,27 +63,30 @@ export class SceneA extends Phaser.Scene {
       endFrame: 1
     });
 
+    this.load.image("part", "assets/images/part.png");
+
     console.log(this.textures.getTextureKeys());
   }
 
   create() {
 
     this.playerTrail = this.add.renderTexture(0, 0, this.scale.gameSize.width, this.scale.gameSize.height);
-    this.playerTrail.setBlendMode(Phaser.BlendModes.ADD);
+    this.playerTrail.setBlendMode(Phaser.BlendModes.SATURATION);
 
     this.smoke = this.add.image(-10, -10, "smoke");
+    this.smoke.setScale(1.3, 1.3);
 
     this.createAnimations();
     this.createLevel();
 
     console.log("CREATE!", this.game);
 
-    this.scoreBoard = new ScoreBoard(this, this.ringGroup);
+    this.scoreBoard = new ScoreBoard(this, this.player);
   }
 
   update() {
     this.ringGroup.update();
-    this.cameras.main.setBackgroundColor("#aaaaaa");
+    this.cameras.main.setBackgroundColor("#55aaff");
     this.playerTrail.draw(this.smoke, this.player.x, this.player.y);
     this.scoreBoard.update();
   }

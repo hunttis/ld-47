@@ -33,18 +33,18 @@ function mergeIntervals(intervals: Interval[]) {
 
 const tuple = (a: number, b: number): Interval => [a, b]
 
-const toPositiveRad = (rad: number) =>
-  (rad >= 0) ? rad : rad + PI2
-
-export function overlappingIntervals(angles: readonly Interval[]): Interval[] {
-  const intervals = angles
+export function normalizedAngles(angles: Interval[]) {
+  return angles
     .map(([entryAngle, exitAngle]) => {
-      const a = toPositiveRad(entryAngle % PI2)
-      const b = toPositiveRad(exitAngle % PI2)
+      const a = Phaser.Math.Angle.Normalize(entryAngle)
+      const b = Phaser.Math.Angle.Normalize(exitAngle)
       const swap = a > b
       return tuple(swap ? b : a, swap ? a : b)
     })
     .sort(([a], [b]) => a - b)
+}
 
+export function overlappingIntervals(angles: Interval[]): Interval[] {
+  const intervals = normalizedAngles(angles)
   return mergeIntervals(intervals)
 }

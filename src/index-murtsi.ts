@@ -63,6 +63,8 @@ export class SceneA extends Phaser.Scene {
       endFrame: 1
     });
 
+    this.load.image("part", "assets/images/part.png");
+
     console.log(this.textures.getTextureKeys());
   }
 
@@ -78,7 +80,7 @@ export class SceneA extends Phaser.Scene {
 
     console.log("CREATE!", this.game);
 
-    this.scoreBoard = new ScoreBoard(this, this.ringGroup);
+    this.scoreBoard = new ScoreBoard(this, this.player);
   }
 
   update() {

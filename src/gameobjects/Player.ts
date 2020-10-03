@@ -2,16 +2,18 @@ import { RingGroup, IntersectionResult } from "../groups/RingGroup";
 import { Ring } from "./Ring";
 
 export class Player extends Phaser.GameObjects.Sprite {
-  ring: Ring;
+  ring!: Ring;
   ringAngle: number;
 
   private thisArray = [this];
 
   private jumpKey: Phaser.Input.Keyboard.Key
   private jumpLastPressed: number = 0
-  private jumpModeDelay: number = 100
+  private jumpModeDelay: number = 150
   private jumpIsDown = false
   private delayToStart: number;
+
+  score: number = 0
 
   constructor(
     parent: Phaser.Scene,
@@ -24,7 +26,7 @@ export class Player extends Phaser.GameObjects.Sprite {
 
     this.scale = 3;
     this.alpha = 0;
-    this.ring = startingRing;
+    this.ring = startingRing
     if (!startingRing.startingAngle) {
       console.log('WARNING! Leveldata does not have startingRing startingAngle!');
     }
@@ -84,6 +86,8 @@ export class Player extends Phaser.GameObjects.Sprite {
     if (jumpTargets.length && isInJumpMode) {
       this.jump(jumpTargets);
     }
+
+    this.ring.scorePickups.children.each(this.checkScorePickupCollision as any)
   }
 
   jumpTargets() {
@@ -91,13 +95,18 @@ export class Player extends Phaser.GameObjects.Sprite {
   }
 
   jump([target]: IntersectionResult[]) {
-    this.ring.exitRing(this.ringAngle)
     this.ring = target.ring
     const angle = Phaser.Math.Angle.BetweenPoints(this.ring, this)
-    this.ring.enterRing(angle)
     this.ringAngle = angle;
     Phaser.Actions.PlaceOnCircle(this.thisArray, this.ring.circle, angle)
     this.jumpLastPressed = 0
+  }
+
+  checkScorePickupCollision = (scorePickup: Phaser.GameObjects.Sprite) => {
+    if (Phaser.Geom.Intersects.RectangleToRectangle(this.getBounds(), scorePickup.getBounds())) {
+      this.score += 80
+      scorePickup.destroy()
+    }
   }
 }
 
