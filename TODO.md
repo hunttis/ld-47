@@ -1,8 +1,9 @@
 # Must have
 
-1. [ ] Pelin nimi
-1. [ ] Äänet + äänitoggle (default off)
-1. [ ] Lisää kenttiä
+1. [X] Pelin nimi
+1. [X] Äänet
+1. [x] Lisää kenttiä
+1. [x] Aänitoggle
 1. [x] Objekti pyörii ympyrässä
 1. [x] Grouppiin ympyröitä
 1. [x] Aloitusympyrä

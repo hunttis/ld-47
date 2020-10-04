@@ -58,7 +58,7 @@ export class Player extends Phaser.GameObjects.Sprite {
       scale: {start: 1, end: 2},
       blendMode: 'ADD',
       alpha: {start: 1, end: 0},
-      frequency: 60, 
+      frequency: 40, 
       quantity: 2,
     }
     

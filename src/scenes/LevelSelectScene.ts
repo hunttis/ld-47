@@ -98,7 +98,12 @@ export class LevelSelectScene extends Phaser.Scene {
                 console.log('Clicked: ', gameObject.name);
                 this.startLevel(parseInt(gameObject.name.substr(5)));
             }
-          );
+        );
+
+        this.input.keyboard.on('keydown_M', () => {
+            this.sound.mute = !this.sound.mute;
+        });
+      
     }
 
     update() {

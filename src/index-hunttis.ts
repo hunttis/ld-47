@@ -97,7 +97,7 @@ export class SceneA extends Phaser.Scene {
   }
 
   createLevel() {
-    const rings = this.levels.getLevel(3).rings.map(ringData => {
+    const rings = this.levels.getLevel(5).rings.map(ringData => {
       return new Ring(this, ringData, this.ringTextures);
     })
 

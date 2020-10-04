@@ -26,6 +26,7 @@ export class GameScene extends Phaser.Scene {
   endLevelTime: number = -1
 
   levelInitialized: boolean = false;
+  soundText!: Phaser.GameObjects.Text;
 
   constructor() {
     super({ active: false, visible: false });
@@ -55,15 +56,21 @@ export class GameScene extends Phaser.Scene {
     
     this.scoreBoard = new ScoreBoard(this);
 
-    this.smoke = this.add.image(-10, -10, "smoke");
-    this.smoke.setScale(1.3, 1.3);
-
     CreateAnimations(this);
    
     this.youWon = new YouWon(this, this.scale.width/2, this.scale.height/2)
     this.youWon.visible = false
     this.youWon.setDepth(10);
-    this.add.existing(this.youWon)
+    this.add.existing(this.youWon);
+
+    this.createSoundText();
+
+    this.input.keyboard.on('keydown_M', () => {
+      this.sound.mute = !this.sound.mute;
+      console.log("Sounds on: " + this.sound.mute);
+      this.soundText.setText("'M' to mute sounds. Sounds on: " + this.sound.mute);
+    });
+
   }
 
   update() {
@@ -118,5 +125,12 @@ export class GameScene extends Phaser.Scene {
       [this.add.existing(new MouseCursor(this, this.ringGroup)), this.player],
       { runChildUpdate: true }
     );
+  }
+
+  createSoundText() {
+    this.soundText = this.add.text(0, this.scale.height - 40, "", { font: "32px Arial" });
+    this.soundText.setText("'M' to mute sounds. Sounds on: " + !this.sound.mute);
+    this.soundText.setShadow(2, 2, '#000000', 10);
+    this.soundText.x = this.scale.width - this.soundText.width - 20;
   }
 }

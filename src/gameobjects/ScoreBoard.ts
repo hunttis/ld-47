@@ -9,7 +9,8 @@ export class ScoreBoard extends Phaser.GameObjects.Container {
 
     constructor(private parent: Phaser.Scene) {
         super(parent, 0, 0)
-        this.scoreText = this.parent.add.text(10, 10, "", { font: "24px Arial" });
+        this.scoreText = this.parent.add.text(10, 10, "", { font: "24px Arial"});
+        this.scoreText.setColor("0x000000");
     }
 
     start() {

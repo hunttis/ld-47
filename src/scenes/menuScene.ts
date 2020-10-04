@@ -3,6 +3,7 @@ import { LevelSelectScene } from "./LevelSelectScene";
 
 export class MenuScene extends Phaser.Scene {
   StartGameEvent: string = "StartGameEvent";
+  soundText!: Phaser.GameObjects.Text;
 
   constructor() {
     super({ active: false, visible: false });
@@ -36,6 +37,18 @@ export class MenuScene extends Phaser.Scene {
       console.log("key", event.key);
       this.events.emit(this.StartGameEvent);
     });
+
+    // this.input.keyboard.on('keydown_M', () => {
+    //   if (this.sound.mute) {
+    //     this.sound.mute = false;
+    //   } else {
+    //     this.sound.mute = true;
+    //   }
+    //   this.sound.mute = !this.sound.mute;
+    //   console.log('Toggling sounds', this.sound.mute);
+    //   this.soundText.setText("You can press M to mute sounds. Sounds are now on: " + this.sound.mute);
+    // });
+
   }
 
   createGameTitle() {
@@ -67,6 +80,11 @@ export class MenuScene extends Phaser.Scene {
     text3.setText("Collect all the gems as quick as you can!");
     text3.setShadow(2, 2, '#000000', 10);
     text3.x = cameraWidth / 2 - text3.width / 2;
+
+    // this.soundText = this.add.text(0, defaultHeight + separationAmount * 4, "", { font: "32px Arial" });
+    // this.soundText.setText("You can press M to mute sounds. Sounds are now on: " + this.sound.mute);
+    // this.soundText.setShadow(2, 2, '#000000', 10);
+    // this.soundText.x = cameraWidth / 2 - this.soundText.width / 2;
 
   }
 
