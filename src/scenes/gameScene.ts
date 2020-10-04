@@ -62,6 +62,7 @@ export class GameScene extends Phaser.Scene {
    
     this.youWon = new YouWon(this, this.scale.width/2, this.scale.height/2)
     this.youWon.visible = false
+    this.youWon.setDepth(10);
     this.add.existing(this.youWon)
   }
 
