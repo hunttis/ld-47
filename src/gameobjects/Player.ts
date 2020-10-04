@@ -12,6 +12,7 @@ export class Player extends Phaser.GameObjects.Sprite {
   private jumpModeDelay: number = 150
   private jumpIsDown = false
   private delayToStart: number;
+  private smokeEmitter: Phaser.GameObjects.Particles.ParticleEmitter;
 
   score: number = 0
 
@@ -43,9 +44,25 @@ export class Player extends Phaser.GameObjects.Sprite {
 
     this.scene.input.keyboard.on('keydown_SPACE', () => {
       this.jumpLastPressed = this.scene.time.now
-    })
+    });
 
+    const smokeParticles = this.scene.add.particles('smoke');
+
+    const smokeConfig: Phaser.Types.GameObjects.Particles.ParticleEmitterConfig = {
+      speed: 10,
+      scale: {start: 1, end: 2},
+      blendMode: 'ADD',
+      alpha: {start: 1, end: 0},
+      frequency: 60, 
+      quantity: 2,
+    }
+    
+    this.smokeEmitter = smokeParticles.createEmitter(smokeConfig);
+    this.smokeEmitter.startFollow(this);
+  
     this.scene.input.keyboard.addCapture('SPACE');
+    
+    this.scene.sound.play('land');
 
     const playerInTweenConfig: any = {
       targets: this,
@@ -53,7 +70,7 @@ export class Player extends Phaser.GameObjects.Sprite {
       alpha: 1,
       duration: 2000,
       ease: 'Bounce.easeOut'
-    } 
+    }
 
     this.scene.tweens.add(playerInTweenConfig)
   }
@@ -61,7 +78,10 @@ export class Player extends Phaser.GameObjects.Sprite {
   update() {
     
     if (this.delayToStart + 2000 > this.scene.time.now) {
+      this.anims.play("playerstop");
       return;
+    } else {
+      this.anims.play("playermove");
     }
 
     this.ringAngle += this.ring.speed;
@@ -72,12 +92,13 @@ export class Player extends Phaser.GameObjects.Sprite {
       this.ringAngle
     );
 
-    const jumpTargets = this.jumpTargets();
-    if (jumpTargets.length) {
-      this.anims.play("exit");
+    if (this.ring.speed > 0) {
+      this.rotation = this.ringAngle + Math.PI;
     } else {
-      this.anims.play("spin");
+      this.rotation = this.ringAngle;
     }
+
+    const jumpTargets = this.jumpTargets();
 
     const now = this.scene.time.now
 
@@ -95,6 +116,7 @@ export class Player extends Phaser.GameObjects.Sprite {
   }
 
   jump([target]: IntersectionResult[]) {
+    this.scene.sound.play('thud');
     this.ring = target.ring
     const angle = Phaser.Math.Angle.BetweenPoints(this.ring, this)
     this.ringAngle = angle;
@@ -106,6 +128,7 @@ export class Player extends Phaser.GameObjects.Sprite {
     if (Phaser.Geom.Intersects.RectangleToRectangle(this.getBounds(), scorePickup.getBounds())) {
       this.score += 80
       scorePickup.destroy()
+      this.scene.sound.play('collect');
     }
   }
 }

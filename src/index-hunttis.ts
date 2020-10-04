@@ -5,6 +5,7 @@ import { Ring } from "./gameobjects/Ring";
 import { ScoreBoard } from "./gameobjects/ScoreBoard";
 import { RingGroup } from "./groups/RingGroup";
 import { RingTextures } from "./util/RingTextures";
+import { CreateAnimations, LoadAssets } from "./util/GameLoader";
 
 export function startGame() {
   const config: Phaser.Types.Core.GameConfig = {
@@ -49,26 +50,12 @@ export class SceneA extends Phaser.Scene {
 
   preload() {
     this.ringTextures = new RingTextures(this);
-
-    this.load.image("smoke", "assets/images/smoke.png");
-    this.load.spritesheet("cursor", "assets/images/cursor.png", {
-      frameWidth: 16,
-      frameHeight: 16,
-      endFrame: 1
-    });
-
-    this.load.spritesheet("player", "assets/images/player-placeholder.png", {
-      frameWidth: 32,
-      frameHeight: 32,
-      endFrame: 1
-    });
-
-    this.load.image("part", "assets/images/part.png");
-
-    console.log(this.textures.getTextureKeys());
+    LoadAssets(this);
   }
 
   create() {
+    focus();
+    console.log("Textures", this.textures.getTextureKeys());
 
     this.playerTrail = this.add.renderTexture(0, 0, this.scale.gameSize.width, this.scale.gameSize.height);
     this.playerTrail.setBlendMode(Phaser.BlendModes.SATURATION);
@@ -76,7 +63,7 @@ export class SceneA extends Phaser.Scene {
     this.smoke = this.add.image(-10, -10, "smoke");
     this.smoke.setScale(1.3, 1.3);
 
-    this.createAnimations();
+    CreateAnimations(this);
     this.createLevel();
 
     console.log("CREATE!", this.game);
@@ -91,30 +78,8 @@ export class SceneA extends Phaser.Scene {
     this.scoreBoard.update();
   }
 
-  createAnimations() {
-    this.anims.create({
-      key: "spin",
-      frames: this.anims.generateFrameNumbers("player", { start: 0, end: 0 }),
-    });
-
-    this.anims.create({
-      key: "exit",
-      frames: this.anims.generateFrameNumbers("player", { start: 1, end: 1 }),
-    });
-
-    this.anims.create({
-      key: "cursor-ok",
-      frames: this.anims.generateFrameNumbers("cursor", { start: 0, end: 0 }),
-    });
-
-    this.anims.create({
-      key: "cursor-fail",
-      frames: this.anims.generateFrameNumbers("cursor", { start: 1, end: 1 }),
-    });
-  }
-
   createLevel() {
-    const rings = this.levels.getLevel(1).rings.map(ringData => {
+    const rings = this.levels.getLevel(2).rings.map(ringData => {
       return new Ring(this, ringData, this.ringTextures);
     })
 

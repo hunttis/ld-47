@@ -1,3 +1,4 @@
+import { CreateAnimations, LoadAssets } from "../util/GameLoader";
 import { Levels } from "../gameobjects/Levels";
 import { MouseCursor } from "../gameobjects/MouseCursor";
 import { Player } from "../gameobjects/player";
@@ -26,20 +27,7 @@ export class GameScene extends Phaser.Scene {
 
   preload() {
     this.ringTextures = new RingTextures(this);
-
-    this.load.image("smoke", "assets/images/smoke.png");
-    this.load.spritesheet("cursor", "assets/images/cursor.png", {
-      frameWidth: 16,
-      frameHeight: 16,
-      endFrame: 1
-    });
-
-    this.load.spritesheet("player", "assets/images/player-placeholder.png", {
-      frameWidth: 32,
-      frameHeight: 32,
-      endFrame: 1
-    });
-
+    LoadAssets(this);
   }
 
   create() {
@@ -48,8 +36,9 @@ export class GameScene extends Phaser.Scene {
     this.playerTrail.setBlendMode(Phaser.BlendModes.ADD);
 
     this.smoke = this.add.image(-10, -10, "smoke");
+    this.smoke.setScale(1.3, 1.3);
 
-    this.createAnimations();
+    CreateAnimations(this);
     this.createLevel();
     
     this.scoreBoard = new ScoreBoard(this, this.player);
@@ -62,28 +51,6 @@ export class GameScene extends Phaser.Scene {
     this.scoreBoard.update();
   }
 
-  createAnimations() {
-    this.anims.create({
-      key: "spin",
-      frames: this.anims.generateFrameNumbers("player", { start: 0, end: 0 }),
-    });
-
-    this.anims.create({
-      key: "exit",
-      frames: this.anims.generateFrameNumbers("player", { start: 1, end: 1 }),
-    });
-
-    this.anims.create({
-      key: "cursor-ok",
-      frames: this.anims.generateFrameNumbers("cursor", { start: 0, end: 0 }),
-    });
-
-    this.anims.create({
-      key: "cursor-fail",
-      frames: this.anims.generateFrameNumbers("cursor", { start: 1, end: 1 }),
-    });
-  }
-
   createLevel() {
     const rings = this.levels.getLevel(1).rings.map(ringData => {
       return new Ring(this, ringData, this.ringTextures);
@@ -93,7 +60,7 @@ export class GameScene extends Phaser.Scene {
     this.add.existing(this.ringGroup);
 
     this.player = new Player(this, rings[0], this.ringGroup);
-    this.physics.add.existing(this.player)
+    this.add.existing(this.player);
 
     this.updateGroup = this.add.group(
       [this.add.existing(new MouseCursor(this, this.ringGroup)), this.player],

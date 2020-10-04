@@ -5,9 +5,10 @@
 1. [x] Aloitusympyrä
 1. [x] Laske ympyröiden intersection pointit
 1. [x] Voi vaihtaa ympyrästä toiseen interpointin lähellä
+1. [ ] Levelin vaihtuminen seuraavaan, vai olisko tässä ennemmin levelivalikko ja joka levelillä eri high score?
 1. [ ] Ympyrä muuttuu "käytetyksi" kun poistuu
-1. [ ] Pisteiden lasku
-1. [ ] Poistumisesta saa pisteitä
+1. [x] Pisteiden lasku
+1. [-] Poistumisesta saa pisteitä
 1. [ ] Käytettyyn ympyrään meneminen poistaa pisteitä
 1. [ ] Saman ympyrän kiertäminen useamman kerran poistaa pisteitä
 1. [ ] Alkuvalikko

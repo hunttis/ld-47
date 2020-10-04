@@ -13,6 +13,8 @@ export interface RingData {
     speed: number;
     startingAngle?: number;
     scorePickups: number
+    scoreStartAngle?: number
+    scoreEndAngle?: number
 }
 
 export class Levels {
@@ -26,13 +28,13 @@ export class Levels {
         },
         2: {
             rings: [
-                {x: 250, y: 250, radius: 200, speed: 0.02, scorePickups: 10},
-                {x: 550, y: 200, radius: 150, speed: 0.02, scorePickups: 10},
-                {x: 750, y: 300, radius: 150, speed: 0.02, scorePickups: 10},
-                {x: 350, y: 550, radius: 150, speed: 0.02, scorePickups: 10},
-                {x: 500, y: 630, radius: 100, speed: 0.02, scorePickups: 10},
-                {x: 700, y: 600, radius: 120, speed: 0.02, scorePickups: 10},
-                {x: 950, y: 550, radius: 200, speed: 0.02, scorePickups: 10},
+                {x: 250, y: 250, radius: 200, speed: 0.02, startingAngle: Math.PI, scorePickups: 20, scoreStartAngle: 0.95, scoreEndAngle: 5.60},
+                {x: 550, y: 200, radius: 150, speed: 0.02, scorePickups: 10, scoreStartAngle: 2.52, scoreEndAngle: 5.91},
+                {x: 750, y: 300, radius: 150, speed: 0.02, scorePickups: 10, scoreStartAngle: 4.48, scoreEndAngle: 0.40},
+                {x: 950, y: 550, radius: 200, speed: 0.02, scorePickups: 20, scoreStartAngle: 4.49, scoreEndAngle: 3.5},
+                {x: 700, y: 600, radius: 120, speed: 0.02, scorePickups: 10, scoreStartAngle: 5.37, scoreEndAngle: 3.16},
+                {x: 500, y: 630, radius: 100, speed: 0.02, scorePickups: 10, scoreStartAngle: 5.89, scoreEndAngle: 4.6},
+                {x: 350, y: 550, radius: 150, speed: 0.02, scorePickups: 10, scoreStartAngle: 3, scoreEndAngle: 4},
               ]
         }
     }
