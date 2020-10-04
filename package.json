@@ -16,7 +16,7 @@
     "phase",
     "game"
   ],
-  "author": "Joni Katajamäki",
+  "author": "Joni Katajamäki & Ville Nuutinen",
   "license": "MIT",
   "devDependencies": {
     "phaser": "^3.24.1",

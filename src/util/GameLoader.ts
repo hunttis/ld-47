@@ -1,5 +1,7 @@
 export const LoadAssets = (scene: Phaser.Scene) => {
 
+    scene.load.image("gradient", "assets/images/gradient.png");
+
     scene.load.image("smoke", "assets/images/smoke.png");
 
     scene.load.spritesheet("cursor", "assets/images/cursor.png", {
@@ -20,7 +22,12 @@ export const LoadAssets = (scene: Phaser.Scene) => {
       endFrame: 6
     });
 
+    scene.load.image("gamebackground", "assets/images/gradient.png");
+
     scene.load.image("part", "assets/images/part.png");
+    scene.load.image("part-synth", "assets/images/part-synth.png");
+    scene.load.image("part-bak", "assets/images/part-bak.png");
+    scene.load.image("part-old", "assets/images/part-old.png");
 
     scene.load.audio('thud', ["assets/sounds/thud.wav", "assets/sounds/thud.ogg", "assets/sounds/thud.mp3"]);
     scene.load.audio('thud2', ["assets/sounds/thud2.wav"]);

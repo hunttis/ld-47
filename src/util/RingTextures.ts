@@ -26,7 +26,8 @@ export class RingTextures {
         }
 
         const renderTexture = this.parent.make.renderTexture(renderTextureConfig, false);
-        const renderPart = this.parent.add.image(-10, -10, 'part');
+        const renderPart = this.parent.add.image(-10, -10, 'part-synth');
+        renderPart.tint = 0xffffff;
 
         const steps = radius / 2;
 

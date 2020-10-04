@@ -1,20 +1,41 @@
-import { Player } from "./player";
+import { Player } from "./Player";
 
-export class ScoreBoard {
+export class ScoreBoard extends Phaser.GameObjects.Container {
     scoreText: Phaser.GameObjects.Text;
 
-    currentScore: number = 0;
+    startTime = -1
+    currentTime: number = 0;
+    running = false
 
-    constructor(private parent: Phaser.Scene, private player: Player) {
-        this.scoreText = this.parent.add.text(10, 10, "Score", { font: "24px Arial" });
+    constructor(private parent: Phaser.Scene) {
+        super(parent, 0, 0)
+        this.scoreText = this.parent.add.text(10, 10, "", { font: "24px Arial" });
+    }
+
+    start() {
+        this.startTime = this.scene.time.now
+        this.running = true
     }
 
     update() {
-        const newScore = this.player.score
-        if (newScore !== this.currentScore) {
-            this.currentScore = newScore;
-            this.scoreText.setText("Score: " + this.currentScore);
+        if (this.running) {
+            const time = this.scene.time.now
+            const elapsed = time - this.startTime
+            const formatted = (elapsed/1000).toFixed(2)
+    
+            this.scoreText.setText(`Time: ${formatted}s`)
         }
     }
 
+    get completionTime() {
+        const time = this.scene.time.now
+        const elapsed = time - this.startTime
+        const formatted = (elapsed/1000).toFixed(2)
+
+        return parseFloat(formatted)
+    }
+
+    stop() {
+        this.running = false
+    }
 }

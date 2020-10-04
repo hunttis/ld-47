@@ -1,4 +1,4 @@
-interface LevelDataFormat {
+export interface LevelDataFormat {
     [key: string]: LevelData;
 }
 
@@ -34,7 +34,7 @@ export class Levels {
                 {x: 950, y: 550, radius: 200, speed: 0.02, scorePickups: 20, scoreStartAngle: 4.49, scoreEndAngle: 3.5},
                 {x: 700, y: 600, radius: 120, speed: 0.02, scorePickups: 10, scoreStartAngle: 5.37, scoreEndAngle: 3.16},
                 {x: 500, y: 630, radius: 100, speed: 0.02, scorePickups: 10, scoreStartAngle: 5.89, scoreEndAngle: 4.6},
-                {x: 350, y: 550, radius: 150, speed: 0.02, scorePickups: 10, scoreStartAngle: 3, scoreEndAngle: 4},
+                {x: 350, y: 550, radius: 150, speed: -0.02, scorePickups: 4, scoreStartAngle: 5, scoreEndAngle: 6.3},
               ]
         }
     }
@@ -42,5 +42,4 @@ export class Levels {
     getLevel(levelNumber: number): LevelData {
         return this.levelData[levelNumber];
     }
-
 }

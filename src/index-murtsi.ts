@@ -6,6 +6,7 @@ import { ScoreBoard } from "./gameobjects/ScoreBoard";
 import { RingGroup } from "./groups/RingGroup";
 import { RingTextures } from "./util/RingTextures";
 import { CreateAnimations, LoadAssets } from "./util/GameLoader";
+import { YouWon } from "./gameobjects/YouWon";
 
 export function startGame() {
   const config: Phaser.Types.Core.GameConfig = {
@@ -41,6 +42,8 @@ export class SceneA extends Phaser.Scene {
   updateGroup!: Phaser.GameObjects.Group;
   scoreBoard!: ScoreBoard;
 
+  youWon!: YouWon
+
   levels: Levels = new Levels();
 
   constructor() {
@@ -49,34 +52,57 @@ export class SceneA extends Phaser.Scene {
   }
 
   preload() {
+    this.load.image("gradient", "assets/images/gradient.png");
+
     this.ringTextures = new RingTextures(this);
     LoadAssets(this);
   }
 
   create() {
-    console.log("Textures", this.textures.getTextureKeys());
 
+    var background = this.add.image(0, 0, 'gradient');
+    
+    background.setPosition(this.scale.width/2, this.scale.height/2);
+    background.setDisplaySize(this.scale.width, this.scale.height);
+    
     this.playerTrail = this.add.renderTexture(0, 0, this.scale.gameSize.width, this.scale.gameSize.height);
     this.playerTrail.setBlendMode(Phaser.BlendModes.SATURATION);
 
     this.smoke = this.add.image(-10, -10, "smoke");
     this.smoke.setScale(1.3, 1.3);
 
+    this.scoreBoard = new ScoreBoard(this);
     CreateAnimations(this);
     this.createLevel();
 
-    console.log("CREATE!", this.game);
-
-    this.scoreBoard = new ScoreBoard(this, this.player);
+    this.youWon = new YouWon(this, this.scale.width/2, this.scale.height/2)
+    this.youWon.visible = false
+    this.add.existing(this.youWon)
   }
 
   update() {
     this.ringGroup.update();
     this.cameras.main.setBackgroundColor("#55aaff");
-    this.playerTrail.draw(this.smoke, this.player.x, this.player.y);
     this.scoreBoard.update();
+
+    if (this.scorePickupCount() === 0) {
+      this.endLevel()
+    }
   }
 
+  endLevel() {
+    this.scoreBoard.stop()
+    this.youWon.setVisible(true)
+  }
+
+  scorePickupCount() {
+    let count = 0
+    this.ringGroup.children.iterate(go => {
+      const ring = go as Ring
+      count += ring.scorePickups.children.size
+    })
+    return count
+  }
 
   createLevel() {
     const rings = this.levels.getLevel(2).rings.map(ringData => {
@@ -86,7 +112,7 @@ export class SceneA extends Phaser.Scene {
     this.ringGroup = new RingGroup(this, rings);
     this.add.existing(this.ringGroup);
 
-    this.player = new Player(this, rings[0], this.ringGroup);
+    this.player = new Player(this, rings[0], this.ringGroup, this.scoreBoard);
     this.add.existing(this.player);
 
     this.updateGroup = this.add.group(

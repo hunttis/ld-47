@@ -6,23 +6,33 @@ import { Ring } from "../gameobjects/Ring";
 import { ScoreBoard } from "../gameobjects/ScoreBoard";
 import { RingGroup } from "../groups/RingGroup";
 import { RingTextures } from "../util/RingTextures";
+import { YouWon } from "../gameobjects/YouWon";
+import { LevelSelectScene } from "../scenes/LevelSelectScene";
+import { WriteLevelScoreToLocalStorage } from "../util/LocalStorageHandler";
 
 export class GameScene extends Phaser.Scene {
   mouseCursor!: Phaser.GameObjects.GameObject;
   ringTextures!: RingTextures;
   ringGroup!: RingGroup;
   player!: Player;
-  playerTrail!: Phaser.GameObjects.RenderTexture;
   smoke!: Phaser.GameObjects.Image;
 
   updateGroup!: Phaser.GameObjects.Group;
   scoreBoard!: ScoreBoard;
+  youWon!: YouWon
 
   levels: Levels = new Levels();
+  levelNumber!: number;
+  endLevelTimer: number = 0
 
   constructor() {
     super({ active: false, visible: false });
     console.log("game", this.game);
+  }
+
+  init(data: any) {
+    console.log('Got some data!', data);
+    this.levelNumber = data.levelNumber;
   }
 
   preload() {
@@ -31,35 +41,58 @@ export class GameScene extends Phaser.Scene {
   }
 
   create() {
+    this.scoreBoard = new ScoreBoard(this);
 
-    this.playerTrail = this.add.renderTexture(0, 0, this.scale.gameSize.width, this.scale.gameSize.height);
-    this.playerTrail.setBlendMode(Phaser.BlendModes.ADD);
+    var background = this.add.image(0, 0, 'gradient');
+    
+    background.setPosition(this.scale.width/2, this.scale.height/2);
+    background.setDisplaySize(this.scale.width, this.scale.height);
 
     this.smoke = this.add.image(-10, -10, "smoke");
     this.smoke.setScale(1.3, 1.3);
 
     CreateAnimations(this);
     this.createLevel();
-    
-    this.scoreBoard = new ScoreBoard(this, this.player);
+   
+    this.youWon = new YouWon(this, this.scale.width/2, this.scale.height/2)
+    this.youWon.visible = false
+    this.add.existing(this.youWon)
   }
 
   update() {
     this.ringGroup.update();
     this.cameras.main.setBackgroundColor("#aaaaaa");
-    this.playerTrail.draw(this.smoke, this.player.x, this.player.y);
     this.scoreBoard.update();
+
+    if (this.scorePickupCount() === 0) {
+      this.endLevel()
+    }
+  }
+
+  endLevel() {
+    this.scoreBoard.stop();
+    WriteLevelScoreToLocalStorage(this.levelNumber, this.scoreBoard.completionTime);
+    this.youWon.setVisible(true);
+  }
+
+  scorePickupCount() {
+    let count = 0
+    this.ringGroup.children.iterate(go => {
+      const ring = go as Ring
+      count += ring.scorePickups.children.size
+    })
+    return count
   }
 
   createLevel() {
-    const rings = this.levels.getLevel(1).rings.map(ringData => {
+    const rings = this.levels.getLevel(this.levelNumber).rings.map(ringData => {
       return new Ring(this, ringData, this.ringTextures);
     })
 
     this.ringGroup = new RingGroup(this, rings);
     this.add.existing(this.ringGroup);
 
-    this.player = new Player(this, rings[0], this.ringGroup);
+    this.player = new Player(this, rings[0], this.ringGroup, this.scoreBoard);
     this.add.existing(this.player);
 
     this.updateGroup = this.add.group(

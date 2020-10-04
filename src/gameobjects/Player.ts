@@ -1,5 +1,6 @@
 import { RingGroup, IntersectionResult } from "../groups/RingGroup";
 import { Ring } from "./Ring";
+import { ScoreBoard } from "./ScoreBoard";
 
 export class Player extends Phaser.GameObjects.Sprite {
   ring!: Ring;
@@ -13,13 +14,15 @@ export class Player extends Phaser.GameObjects.Sprite {
   private jumpIsDown = false
   private delayToStart: number;
   private smokeEmitter: Phaser.GameObjects.Particles.ParticleEmitter;
+  private started = false 
 
   score: number = 0
 
   constructor(
     parent: Phaser.Scene,
     startingRing: Ring,
-    private ringGroup: RingGroup
+    private ringGroup: RingGroup,
+    private scoreBoard: ScoreBoard
   ) {
     super(parent, 0, 0, "player");
 
@@ -81,6 +84,7 @@ export class Player extends Phaser.GameObjects.Sprite {
       this.anims.play("playerstop");
       return;
     } else {
+      this.start()
       this.anims.play("playermove");
     }
 
@@ -111,8 +115,15 @@ export class Player extends Phaser.GameObjects.Sprite {
     this.ring.scorePickups.children.each(this.checkScorePickupCollision as any)
   }
 
+  start() {
+    if (this.started) return
+    this.started = true
+
+    this.scoreBoard.start()
+  }
+
   jumpTargets() {
-    return this.ringGroup.findCloseIntersections(this.ring, this, 5);
+    return this.ringGroup.findCloseIntersections(this.ring, this, 25);
   }
 
   jump([target]: IntersectionResult[]) {

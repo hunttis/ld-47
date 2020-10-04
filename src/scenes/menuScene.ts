@@ -1,4 +1,4 @@
-import { GameScene } from "./gameScene";
+import { LevelSelectScene } from "./LevelSelectScene";
 
 export class MenuScene extends Phaser.Scene {
   StartGameEvent: string = "StartGameEvent";
@@ -14,7 +14,7 @@ export class MenuScene extends Phaser.Scene {
 
     this.load.image("background", "assets/images/background.png");
 
-    this.scene.add("GameScene", GameScene, false);
+    this.scene.add("LevelSelectScene", LevelSelectScene, false);
   }
 
   create() {
@@ -47,7 +47,7 @@ export class MenuScene extends Phaser.Scene {
   }
 
   createTutorialText() {
-    const cameraWidth = this.cameras.default.width;
+    const cameraWidth = this.game.scale.width;
 
     const defaultHeight = this.game.scale.height - 500;
     const separationAmount = 40;
@@ -140,6 +140,6 @@ export class MenuScene extends Phaser.Scene {
   }
 
   startGameScene() {
-    this.scene.start("GameScene");
+    this.scene.start("LevelSelectScene");
   }
 }
