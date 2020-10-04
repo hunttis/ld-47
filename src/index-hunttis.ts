@@ -25,7 +25,7 @@ export function startGame() {
     },
     parent: "game",
     backgroundColor: "#C724B1",
-    scene: new LevelSelectScene(),
+    scene: new SceneA(),
   };
 
   return new Phaser.Game(config);
@@ -97,7 +97,7 @@ export class SceneA extends Phaser.Scene {
   }
 
   createLevel() {
-    const rings = this.levels.getLevel(2).rings.map(ringData => {
+    const rings = this.levels.getLevel(3).rings.map(ringData => {
       return new Ring(this, ringData, this.ringTextures);
     })
 

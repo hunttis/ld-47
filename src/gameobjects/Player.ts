@@ -14,7 +14,8 @@ export class Player extends Phaser.GameObjects.Sprite {
   private jumpIsDown = false
   private delayToStart: number;
   private smokeEmitter: Phaser.GameObjects.Particles.ParticleEmitter;
-  private started = false 
+  private started = false
+  private lastTime = 0
 
   score: number = 0
 
@@ -25,7 +26,8 @@ export class Player extends Phaser.GameObjects.Sprite {
     private scoreBoard: ScoreBoard
   ) {
     super(parent, 0, 0, "player");
-
+    console.log('PLAYER CONSTRUCTED')
+    
     this.delayToStart = this.scene.time.now;
 
     this.scale = 3;
@@ -78,7 +80,14 @@ export class Player extends Phaser.GameObjects.Sprite {
     this.scene.tweens.add(playerInTweenConfig)
   }
 
+  create() {
+    console.log("PLAYER CREATE");
+  }
+
+
   update() {
+    const delta = (this.scene.time.now - this.lastTime) / 1000
+    this.lastTime = this.scene.time.now
     
     if (this.delayToStart + 2000 > this.scene.time.now) {
       this.anims.play("playerstop");
@@ -88,7 +97,7 @@ export class Player extends Phaser.GameObjects.Sprite {
       this.anims.play("playermove");
     }
 
-    this.ringAngle += this.ring.speed;
+    this.ringAngle += this.ring.speed * delta * 90;
     this.ring.updatePlayerAngle(this.ringAngle)
     Phaser.Actions.PlaceOnCircle(
       this.thisArray,

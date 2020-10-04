@@ -16,7 +16,7 @@ export const WriteLevelScoreToLocalStorage = (levelNumber: number, score: number
         storage.setItem(`levelscore${levelNumber}`, `${score}`);
         console.log('Saving totally new score!')
     } else if (levelScore) {
-        const levelScoreAmount = parseInt(levelScore);
+        const levelScoreAmount = parseFloat(levelScore);
         if (score < levelScoreAmount) {
             storage.setItem(`levelscore${levelNumber}`, `${score}`);
             console.log('Saving better score!')

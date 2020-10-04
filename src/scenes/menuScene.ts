@@ -1,3 +1,4 @@
+import { GameScene } from "./gameScene";
 import { LevelSelectScene } from "./LevelSelectScene";
 
 export class MenuScene extends Phaser.Scene {
@@ -15,6 +16,7 @@ export class MenuScene extends Phaser.Scene {
     this.load.image("background", "assets/images/background.png");
 
     this.scene.add("LevelSelectScene", LevelSelectScene, false);
+    this.scene.add("GameScene", GameScene, false);
   }
 
   create() {
@@ -39,7 +41,7 @@ export class MenuScene extends Phaser.Scene {
   createGameTitle() {
     const cameraWidth = this.cameras.default.width;
 
-    const text1 = this.add.text(0, 100, "Ludum Dare 47 Game", { font: "128px Arial" });
+    const text1 = this.add.text(0, 100, "Crystal Racer", { font: "128px Arial" });
     text1.setTint(0xffff00, 0xffff00, 0xff0000, 0xff0000);
     text1.setShadow(2, 2, '#000000', 10);
 
@@ -65,11 +67,6 @@ export class MenuScene extends Phaser.Scene {
     text3.setText("Collect all the gems as quick as you can!");
     text3.setShadow(2, 2, '#000000', 10);
     text3.x = cameraWidth / 2 - text3.width / 2;
-
-    const text4 = this.add.text(0, defaultHeight + separationAmount * 4, "", { font: "32px Arial" });
-    text4.setText("Overlapping a previous route will reduce your score!");
-    text4.setShadow(2, 2, '#000000', 10);
-    text4.x = cameraWidth / 2 - text4.width / 2;
 
   }
 

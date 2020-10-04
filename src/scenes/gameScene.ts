@@ -23,7 +23,9 @@ export class GameScene extends Phaser.Scene {
 
   levels: Levels = new Levels();
   levelNumber!: number;
-  endLevelTimer: number = 0
+  endLevelTime: number = -1
+
+  levelInitialized: boolean = false;
 
   constructor() {
     super({ active: false, visible: false });
@@ -31,28 +33,32 @@ export class GameScene extends Phaser.Scene {
   }
 
   init(data: any) {
+    console.log('GAME INIT');
     console.log('Got some data!', data);
     this.levelNumber = data.levelNumber;
   }
 
   preload() {
+    console.log('GAME PRELOAD');
     this.ringTextures = new RingTextures(this);
     LoadAssets(this);
   }
 
   create() {
-    this.scoreBoard = new ScoreBoard(this);
+    console.log("CREATED GAMESCENE!");
+    
+    this.levelInitialized = false;
 
     var background = this.add.image(0, 0, 'gradient');
-    
     background.setPosition(this.scale.width/2, this.scale.height/2);
     background.setDisplaySize(this.scale.width, this.scale.height);
+    
+    this.scoreBoard = new ScoreBoard(this);
 
     this.smoke = this.add.image(-10, -10, "smoke");
     this.smoke.setScale(1.3, 1.3);
 
     CreateAnimations(this);
-    this.createLevel();
    
     this.youWon = new YouWon(this, this.scale.width/2, this.scale.height/2)
     this.youWon.visible = false
@@ -60,6 +66,11 @@ export class GameScene extends Phaser.Scene {
   }
 
   update() {
+    if (!this.levelInitialized) {
+      this.createLevel();
+      this.levelInitialized = true;
+    }
+
     this.ringGroup.update();
     this.cameras.main.setBackgroundColor("#aaaaaa");
     this.scoreBoard.update();
@@ -70,9 +81,16 @@ export class GameScene extends Phaser.Scene {
   }
 
   endLevel() {
-    this.scoreBoard.stop();
-    WriteLevelScoreToLocalStorage(this.levelNumber, this.scoreBoard.completionTime);
-    this.youWon.setVisible(true);
+    if (this.endLevelTime === -1) {
+      this.endLevelTime = this.time.now
+      this.scoreBoard.stop();
+      WriteLevelScoreToLocalStorage(this.levelNumber, this.scoreBoard.completionTime);
+      this.youWon.setVisible(true);
+    } else if (this.endLevelTime + 3000 < this.time.now) {
+      this.scene.start("LevelSelectScene")
+      this.endLevelTime = -1
+    }
+
   }
 
   scorePickupCount() {

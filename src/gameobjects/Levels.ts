@@ -29,14 +29,24 @@ export class Levels {
         2: {
             rings: [
                 {x: 250, y: 250, radius: 200, speed: 0.02, startingAngle: Math.PI, scorePickups: 20, scoreStartAngle: 0.95, scoreEndAngle: 5.60},
-                {x: 550, y: 200, radius: 150, speed: 0.02, scorePickups: 10, scoreStartAngle: 2.52, scoreEndAngle: 5.91},
-                {x: 750, y: 300, radius: 150, speed: 0.02, scorePickups: 10, scoreStartAngle: 4.48, scoreEndAngle: 0.40},
+                {x: 550, y: 200, radius: 150, speed: 0.03, scorePickups: 10, scoreStartAngle: 2.52, scoreEndAngle: 5.91},
+                {x: 750, y: 300, radius: 150, speed: 0.03, scorePickups: 10, scoreStartAngle: 4.48, scoreEndAngle: 0.40},
                 {x: 950, y: 550, radius: 200, speed: 0.02, scorePickups: 20, scoreStartAngle: 4.49, scoreEndAngle: 3.5},
-                {x: 700, y: 600, radius: 120, speed: 0.02, scorePickups: 10, scoreStartAngle: 5.37, scoreEndAngle: 3.16},
-                {x: 500, y: 630, radius: 100, speed: 0.02, scorePickups: 10, scoreStartAngle: 5.89, scoreEndAngle: 4.6},
-                {x: 350, y: 550, radius: 150, speed: -0.02, scorePickups: 4, scoreStartAngle: 5, scoreEndAngle: 6.3},
+                {x: 700, y: 600, radius: 120, speed: 0.04, scorePickups: 10, scoreStartAngle: 5.37, scoreEndAngle: 3.16},
+                {x: 500, y: 630, radius: 100, speed: 0.04, scorePickups: 10, scoreStartAngle: 5.89, scoreEndAngle: 4.6},
+                {x: 350, y: 550, radius: 150, speed: -0.03, scorePickups: 4, scoreStartAngle: 5, scoreEndAngle: 6.3},
               ]
-        }
+        },
+        3: {
+            rings: [
+                {x: 200, y: 200, radius: 100, speed: 0.05, startingAngle: Math.PI / 2, scorePickups: 10, scoreStartAngle: 2, scoreEndAngle: 5.60},
+                {x: 550, y: 350, radius: 300, speed: 0.02, scorePickups: 10, scoreStartAngle: 4, scoreEndAngle: 6},
+                {x: 850, y: 250, radius: 150, speed: 0.03, scorePickups: 10, scoreStartAngle: 4.48, scoreEndAngle: 0.0},
+                {x: 950, y: 450, radius: 200, speed: 0.02, scorePickups: 20, scoreStartAngle: 5, scoreEndAngle: 2.5},
+                {x: 300, y: 600, radius: 120, speed: 0.04, scorePickups: 5, scoreStartAngle: 5, scoreEndAngle: 6.16},
+            ]
+        },
+
     }
 
     getLevel(levelNumber: number): LevelData {

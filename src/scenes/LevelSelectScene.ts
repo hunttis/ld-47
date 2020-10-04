@@ -14,8 +14,6 @@ export class LevelSelectScene extends Phaser.Scene {
     preload() {
         this.load.image("gamebackground", "assets/images/gradient.png");
         LoadAssets(this);
-
-        this.scene.add("GameScene", GameScene, false);
     }
 
     create() {
