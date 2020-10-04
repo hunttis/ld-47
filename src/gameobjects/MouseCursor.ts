@@ -1,4 +1,4 @@
-import { RingGroup } from "src/groups/RingGroup"
+import { RingGroup } from "../groups/RingGroup"
 
 export class MouseCursor extends Phaser.GameObjects.Sprite {
   constructor(scene: Phaser.Scene, private ringGroup: RingGroup) {

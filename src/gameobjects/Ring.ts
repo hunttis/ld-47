@@ -1,4 +1,4 @@
-import { RingTextures } from "src/util/ringTextures";
+import { RingTextures } from "../util/ringTextures";
 import { RingData } from "./Levels";
 import {Interval, overlappingIntervals} from './overlappingIntervals'
 import {DEBUG} from '../config'
