@@ -1,6 +1,6 @@
 import { Levels } from "./gameobjects/Levels";
 import { MouseCursor } from "./gameobjects/MouseCursor";
-import { Player } from "./gameobjects/player";
+import { Player } from "./gameobjects/Player";
 import { Ring } from "./gameobjects/Ring";
 import { ScoreBoard } from "./gameobjects/ScoreBoard";
 import { RingGroup } from "./groups/RingGroup";
